@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DS_IP92_LR6._2_ZalizchukD
 {
@@ -8,13 +9,13 @@ namespace DS_IP92_LR6._2_ZalizchukD
     {
         static void Main(string[] args)
         {
-            string graph = "input.txt", choice;
-            
+            string file = "input.txt", choice;
+            Graph graph = new Graph(file);
             
         }
     }
 
-    class Graph()
+    class Graph
     {
         private int n, m;
         private int[,] mSmezh;
@@ -47,6 +48,24 @@ namespace DS_IP92_LR6._2_ZalizchukD
                         vertexPowers[i]++;
             
             sr.Close();
+        }
+        
+        private void sortVertexPowers()
+        {
+            List<int> array = new List<int>();
+
+            int max = vertexPowers.Max();
+
+            while (max > 0)
+            {
+                for (int i = 0; i < n; i++)
+                    if (vertexPowers[i] == max)
+                        array.Add(i);
+
+                max--;
+            }
+
+            vertexPowers = array.ToArray();
         }
 
     }
