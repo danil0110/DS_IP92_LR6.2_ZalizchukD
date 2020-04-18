@@ -9,13 +9,15 @@ namespace DS_IP92_LR6._2_ZalizchukD
     {
         static void Main(string[] args)
         {
-            string file = "input.txt", choice;
+            string file = "input.txt";
             Graph graph = new Graph(file);
             graph.Coloring();
 
         }
     }
 
+    // ================ КЛАСС "ГРАФ" ================
+    
     class Graph
     {
         private int n, m;
@@ -23,6 +25,8 @@ namespace DS_IP92_LR6._2_ZalizchukD
         private int[] vertexPowers;
         private bool[] visited;
 
+        // ================ КОНСТРУКТОР, ЧТЕНИЕ ДАННЫХ О ГРАФЕ ================
+        
         public Graph(string path)
         {
             StreamReader sr = new StreamReader(path);
@@ -51,6 +55,8 @@ namespace DS_IP92_LR6._2_ZalizchukD
             sr.Close();
         }
         
+        // ================ СОРТИРОВКА ВЕРШИН ПО УБЫВАНИЮ СТЕПЕНЕЙ, НО ПО ВОЗРАСТАНИЮ НОМЕРОВ ================
+        
         private void sortVertexPowers()
         {
             List<int> array = new List<int>();
@@ -69,22 +75,27 @@ namespace DS_IP92_LR6._2_ZalizchukD
             vertexPowers = array.ToArray();
         }
 
+        // ================ РАСКРАСКА ВЕРШИН ГРАФА ================
+        
         public void Coloring()
         {
             sortVertexPowers();
             
-            int trueCount = 0, color = -1, count;
-            List<List<int>> colors = new List<List<int>>();
+            int trueCount = 0, // счетчик закрашенных вершин
+                color = -1,    // номер цвета
+                count;         // счетчик несмежных вершин
+            
+            List<List<int>> colors = new List<List<int>>(); // список цветов и вершин каждого цвета
 
             while (trueCount != n)
             {
                 color++;
                 for (int i = 0; i < n; i++)
                 {
-                    if (visited[vertexPowers[i]] == false)
+                    if (visited[vertexPowers[i]] == false) // если вершина не закрашена
                     {
-                        colors.Add(new List<int>());
-                        colors[color].Add(vertexPowers[i]);
+                        colors.Add(new List<int>()); // добавляем новый цвет
+                        colors[color].Add(vertexPowers[i]); // закрашиваем вершину в этот цвет
                         visited[vertexPowers[i]] = true;
                         trueCount++;
                         break;
@@ -97,9 +108,9 @@ namespace DS_IP92_LR6._2_ZalizchukD
                     for (int j = 0; j < colors[color].Count; j++)
                         if (visited[vertexPowers[i]] == false)
                             if (mSmezh[vertexPowers[i], colors[color][j]] == 0)
-                                count++;
+                                count++; // проверяем, чтобы вершина не была смежна с каждой из закрашенных вершин
 
-                    if (count == colors[color].Count)
+                    if (count == colors[color].Count) // если не смежна - закрашиваем
                     {
                         colors[color].Add(vertexPowers[i]);
                         visited[vertexPowers[i]] = true;
