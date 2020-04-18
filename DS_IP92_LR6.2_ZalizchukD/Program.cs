@@ -11,7 +11,8 @@ namespace DS_IP92_LR6._2_ZalizchukD
         {
             string file = "input.txt", choice;
             Graph graph = new Graph(file);
-            
+            graph.Coloring();
+
         }
     }
 
@@ -66,6 +67,59 @@ namespace DS_IP92_LR6._2_ZalizchukD
             }
 
             vertexPowers = array.ToArray();
+        }
+
+        public void Coloring()
+        {
+            sortVertexPowers();
+            
+            int trueCount = 0, color = -1, count;
+            List<List<int>> colors = new List<List<int>>();
+
+            while (trueCount != n)
+            {
+                color++;
+                for (int i = 0; i < n; i++)
+                {
+                    if (visited[vertexPowers[i]] == false)
+                    {
+                        colors.Add(new List<int>());
+                        colors[color].Add(vertexPowers[i]);
+                        visited[vertexPowers[i]] = true;
+                        trueCount++;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < n; i++)
+                {
+                    count = 0;
+                    for (int j = 0; j < colors[color].Count; j++)
+                        if (visited[vertexPowers[i]] == false)
+                            if (mSmezh[vertexPowers[i], colors[color][j]] == 0)
+                                count++;
+
+                    if (count == colors[color].Count)
+                    {
+                        colors[color].Add(vertexPowers[i]);
+                        visited[vertexPowers[i]] = true;
+                        trueCount++;
+                    }
+                }
+                
+            }
+            
+            Console.WriteLine($"Минимальное количество цветов - {colors.Count}\n");
+            for (int i = 0; i < colors.Count; i++)
+            {
+                Console.Write($"{i + 1} цвет: ");
+                for (int j = 0; j < colors[i].Count; j++)
+                {
+                    Console.Write($"{colors[i][j] + 1} ");
+                }
+                Console.WriteLine();
+            }
+            
         }
 
     }
